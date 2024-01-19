@@ -6,7 +6,7 @@ const Goal = require('../models/goalModel');
 //@route GET /api/goals
 //@access private
 const getGoals = asyncHandler(async(req, res)=>{
-    const goals = await Goal.find();
+    const goals = await Goal.find({user:req.user.id});
     res.status(200).json({goals});
 });
 
@@ -19,7 +19,8 @@ const setGoal = asyncHandler(async(req, res)=>{
         throw new Error('Please add a text field');
     };
     const goal = await Goal.create({
-        text:req.body.text
+        text:req.body.text,
+        user:req.user.id
     })
     res.status(200).json({goal});
 });
@@ -52,9 +53,6 @@ const deleteGoal = asyncHandler(async(req, res)=>{
     await goal.remove();
     res.status(200).json({id: req.params.id});
 });
-
-
-
 
 module.exports = {
     getGoals,
