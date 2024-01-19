@@ -109,6 +109,24 @@ const searchUser = asyncHandler(async (req, res) => {
   res.status(200).json({ result });
 });
 
+//@desc toggle user status
+//@route GET /api/admin/toggleStatus/userId
+//@access Private
+const toggleStatus = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      res.status(404);
+      throw new Error("No user found!");
+    }
+    // Toggle the isBlocked status
+    const newStatus = !user.isBlocked; 
+    await User.findByIdAndUpdate(req.params.userId,{isBlocked:newStatus});
+
+    res.status(200).json({message:'User status changed'});
+  });
+
+
+
 //JWT generation
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -122,4 +140,5 @@ module.exports = {
   searchUser,
   updateUserDetails,
   deleteUser,
+  toggleStatus,
 };
