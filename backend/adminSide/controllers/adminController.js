@@ -125,8 +125,6 @@ const toggleStatus = asyncHandler(async (req, res) => {
     res.status(200).json({message:'User status changed'});
   });
 
-
-
 //JWT generation
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
