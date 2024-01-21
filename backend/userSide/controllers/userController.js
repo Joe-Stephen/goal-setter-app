@@ -36,6 +36,7 @@ const registerUser = asyncHandler(async(req, res) =>{
             _id:user.id,
             name:user.name,
             email:user.email,
+            profileUrl:user.profileUrl,
             token: generateToken(user._id)
         })
     }else{
@@ -63,6 +64,7 @@ const loginUser = asyncHandler(async(req, res) =>{
             _id:user.id,
             name:user.name,
             email:user.email,
+            profileUrl:user.profileUrl,
             token: generateToken(user._id)
         });
     }else{
@@ -82,13 +84,15 @@ const getMe = asyncHandler(async(req, res) =>{
 //@route POST /api/users/profile/upload
 //@access Private
 const profileUpload = asyncHandler(async(req, res) =>{
-    console.log("called the function")
+    console.log("called the function the body",req.body)
     const url = req.body.url;
+    const user = req.body.liveUser;
     console.log("the url==",url)
-    await User.findByIdAndUpdate(req.user.id, {
+    console.log("the user==",user)
+    await User.findByIdAndUpdate(user._id, {
         profileUrl: url
     });
-    res.status(200).json(req.user);
+    res.status(200).json(user);
 });
 
 //JWT generation

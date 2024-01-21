@@ -24,14 +24,16 @@ const login = async (userData) => {
   return response.data
 }
 
-//Profile Upload
+// Profile Uplaod
 const profileUpload = async(token, url) => {
   const config = {
       headers : {
           Authorization: `Bearer ${token}`
       }
   }
-  const response = await axios.post(API_URL + 'profile/upload',{url}, config)
+  const liveUser = JSON.parse(localStorage.getItem('user'))
+  console.log("the user====",);
+  const response = await axios.post(API_URL + 'profile/upload',{url, liveUser}, config)
   return response.data
 }
 
@@ -40,15 +42,11 @@ const logout = () => {
   localStorage.removeItem('user')
 }
 
-//go to user profile
-const loadProfile = () => {
-  
-}
-
 const authService = {
   register,
   logout,
   login,
+  profileUpload,
 }
 
 export default authService
