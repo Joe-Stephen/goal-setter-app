@@ -5,6 +5,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required:[true, 'Please add a name']
     },
+    profileUrl: {
+        type: String,
+        default:''
+    },
     email:{
         type: String,
         required:[true, 'Please add an email'],

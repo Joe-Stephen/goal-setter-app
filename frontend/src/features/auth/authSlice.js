@@ -43,6 +43,18 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   }
 })
 
+// User Profile Uppdate
+export const profileUpdate = createAsyncThunk('auth/profile', async(profileUrl,thunkAPI) => {
+  try {
+      const token = thunkAPI.getState().auth.user.token
+      return await authService.profileUpload(token, profileUrl)
+  } catch (error) {
+      const message  = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+      return thunkAPI.rejectWithValue(message)
+  }
+})
+
+//Logout user
 export const logout = createAsyncThunk('auth/logout', async () => {
   await authService.logout()
 })

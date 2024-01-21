@@ -24,9 +24,25 @@ const login = async (userData) => {
   return response.data
 }
 
+//Profile Upload
+const profileUpload = async(token, url) => {
+  const config = {
+      headers : {
+          Authorization: `Bearer ${token}`
+      }
+  }
+  const response = await axios.post(API_URL + 'profile/upload',{url}, config)
+  return response.data
+}
+
 // Logout user
 const logout = () => {
   localStorage.removeItem('user')
+}
+
+//go to user profile
+const loadProfile = () => {
+  
 }
 
 const authService = {

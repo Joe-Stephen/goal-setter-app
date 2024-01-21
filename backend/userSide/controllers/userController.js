@@ -78,6 +78,19 @@ const getMe = asyncHandler(async(req, res) =>{
     res.status(200).json(req.user);
 });
 
+//@desc Update user profile picture
+//@route POST /api/users/profile/upload
+//@access Private
+const profileUpload = asyncHandler(async(req, res) =>{
+    console.log("called the function")
+    const url = req.body.url;
+    console.log("the url==",url)
+    await User.findByIdAndUpdate(req.user.id, {
+        profileUrl: url
+    });
+    res.status(200).json(req.user);
+});
+
 //JWT generation
 const generateToken = (id)=>{
     return jwt.sign({id}, process.env.JWT_SECRET, {
@@ -89,4 +102,5 @@ module.exports = {
     registerUser,
     loginUser,
     getMe,
+    profileUpload,
 };

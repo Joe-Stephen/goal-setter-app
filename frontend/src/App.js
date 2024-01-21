@@ -1,10 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Profile from './pages/user/Profile'
 import Header from './components/Header'
-import Dashboard from './pages/Dashboard'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import Dashboard from './pages/user/Dashboard'
+import Login from './pages/user/Login'
+import Register from './pages/user/Register'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path='/' element={<Dashboard />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/profile' element={<Profile />} />
           </Routes>
         </div>
       </Router>
