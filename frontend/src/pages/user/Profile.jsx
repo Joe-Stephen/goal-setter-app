@@ -34,7 +34,6 @@ function Profile() {
             .catch(err => console.log(err))
     }
 
-
     return (
         <div>
             <h1>Profile Page</h1>

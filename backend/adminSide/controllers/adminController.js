@@ -37,12 +37,12 @@ const postAdminLogin = asyncHandler(async (req, res) => {
 //@route GET /api/admin/
 //@access Private
 const getUsersList = asyncHandler(async (req, res) => {
-  const usersList = await User.find();
-  if (usersList) {
-    res.status(200).json({ usersList });
+  const users = await User.find()
+  if(users) {
+      res.status(200).json({users})
   } else {
-    res.status(404);
-    throw new error("No users found!");
+      res.status(404)
+      throw new Error('Users Not Found')
   }
 });
 
@@ -96,17 +96,13 @@ const updateUserDetails = asyncHandler(async (req, res) => {
 });
 
 //@desc search for a user
-//@route GET /api/admin/users/searchKey
+//@route POST /api/admin/search
 //@access Private
 const searchUser = asyncHandler(async (req, res) => {
-  const searchKey = req.params.searchKey;
-  const regex = new RegExp(searchKey, "i");
-  const result = await User.find({ name: regex });
-  if (result.length===0) {
-    res.status(404);
-    throw new Error("No users found!");
-  }
-  res.status(200).json({ result });
+  const query = req.body.query;
+  const regex = new RegExp(`^${query}`, "i");
+  const users = await User.find({ name: { $regex: regex } })
+  res.status(200).json(users);
 });
 
 //@desc toggle user status

@@ -19,7 +19,7 @@ router
   .route("/:userId")
   .delete(protect, deleteUser)
   .put(protect, updateUserDetails);
-router.route("/users/:searchKey").get(protect, searchUser);
+router.route("/search").post(protect, searchUser);
 router.route("/toggleStatus/:userId").put(protect, toggleStatus);
 
 module.exports = router;
