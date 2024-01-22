@@ -53,16 +53,16 @@ const UserList = () => {
                     <div key={user._id}>
                         <p>Name: {user.name}</p>
                         <p>Email: {user.email}</p>
-                        <p>User Status: {user.isBlock ? 'Blocked' : 'Unblocked'}</p>
+                        <p>User Status: {user.isBlocked ? 'Blocked' : 'Unblocked'}</p>
                         <form style={{display:'flex', justifyContent:'center', gap: '10px'}}>
                             <div className="form-group">
                                 <button onClick={() => handleEdit(user._id, user.name, user.email)} className='btn'>Edit</button>
                             </div>
                             <div className="form-group">
-                                <button onClick={() => handleBlock(user._id)} className='btn'>Block</button>
+                                <button onClick={() => handleBlock(user._id)} className='block-btn'>Block</button>
                             </div>
                             <div className="form-group">
-                                <button onClick={() => handleUnBlock(user._id)} className='btn'>Unblock</button>
+                                <button onClick={() => handleUnBlock(user._id)} className='unblock-btn'>Unblock</button>
                             </div>
                         </form>
                     </div>

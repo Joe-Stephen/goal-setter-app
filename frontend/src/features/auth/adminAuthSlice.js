@@ -81,6 +81,7 @@ export const editUser = createAsyncThunk('admin/editUser', async ({userId, name,
         const token = thunkAPI.getState().adminAuth.admin.token
         return await adminAuthService.editUserDetails(token, userId, name, email)
     } catch (error) {
+        alert(error)
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }

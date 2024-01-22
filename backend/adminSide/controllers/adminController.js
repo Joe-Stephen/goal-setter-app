@@ -60,40 +60,62 @@ const deleteUser = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.userId });
 });
 
+
+// @desc Edit User
+// @route POST /api/admin/userId
+// @access Private
+const editUser = asyncHandler(async (req, res) => {
+  const { userId, name, email } = req.body;
+   //duplicate email id check
+   const emailExists = await User.findOne({ email, _id: { $ne: userId } });
+   if (emailExists) {
+     res.status(404);
+     throw new Error("This email is already registered!");
+   }
+  const updatedUser = await User.findByIdAndUpdate(userId, { name, email }, { new: true });
+  const users = await User.find();
+  if (users) {
+      res.status(200).json({ users });
+  } else {
+      res.status(404);
+      throw new Error('Users Not Found');
+  }
+});
+
 //@desc update user details
 //@route PUT /api/admin/:userId
 //@access Private
-const updateUserDetails = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    res.status(400);
-    throw new Error("Add all the fields!");
-  }
-  const user = await User.findById(req.params.userId);
-  if (!user) {
-    res.status(404);
-    throw new Error("User not found!");
-  }
-  //duplicate email id check
-  const emailExists = await User.findOne({ email, _id: { $ne: user._id } });
-  if (emailExists) {
-    res.status(404);
-    throw new Error("This email is already registered!");
-  }
+// const updateUserDetails = asyncHandler(async (req, res) => {
+//   const { name, email, password } = req.body;
+//   if (!name || !email || !password) {
+//     res.status(400);
+//     throw new Error("Add all the fields!");
+//   }
+//   const user = await User.findById(req.params.userId);
+//   if (!user) {
+//     res.status(404);
+//     throw new Error("User not found!");
+//   }
+//   //duplicate email id check
+//   const emailExists = await User.findOne({ email, _id: { $ne: user._id } });
+//   if (emailExists) {
+//     res.status(404);
+//     throw new Error("This email is already registered!");
+//   }
 
-  //hashing password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+//   //hashing password
+//   const salt = await bcrypt.genSalt(10);
+//   const hashedPassword = await bcrypt.hash(password, salt);
 
-  //updating user details
-  await User.findByIdAndUpdate(req.params.userId, {
-    name,
-    email,
-    password: hashedPassword,
-  });
+//   //updating user details
+//   await User.findByIdAndUpdate(req.params.userId, {
+//     name,
+//     email,
+//     password: hashedPassword,
+//   });
 
-  res.status(200).json("User details updated");
-});
+//   res.status(200).json("User details updated");
+// });
 
 //@desc search for a user
 //@route POST /api/admin/search
@@ -108,18 +130,52 @@ const searchUser = asyncHandler(async (req, res) => {
 //@desc toggle user status
 //@route GET /api/admin/toggleStatus/userId
 //@access Private
-const toggleStatus = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.userId);
-    if (!user) {
-      res.status(404);
-      throw new Error("No user found!");
-    }
-    // Toggle the isBlocked status
-    const newStatus = !user.isBlocked; 
-    await User.findByIdAndUpdate(req.params.userId,{isBlocked:newStatus});
+// const toggleStatus = asyncHandler(async (req, res) => {
+//     const user = await User.findById(req.params.userId);
+//     if (!user) {
+//       res.status(404);
+//       throw new Error("No user found!");
+//     }
+//     // Toggle the isBlocked status
+//     const newStatus = !user.isBlocked; 
+//     await User.findByIdAndUpdate(req.params.userId,{isBlocked:newStatus});
 
-    res.status(200).json({message:'User status changed'});
-  });
+//     res.status(200).json({message:'User status changed'});
+//   });
+
+// @desc Block User
+// @route POST /api/admin/block
+// @access Private
+const userBlock = asyncHandler( async(req, res) => {
+  const userId = req.body.userId
+  const user = await User.findByIdAndUpdate(userId, {
+    isBlocked
+    :true})
+  const users = await User.find()
+  if(users) {
+      res.status(200).json({users})
+  } else {
+      res.status(404)
+      throw new Error('Users Not Found')
+  }
+})
+
+// @desc UnBlock User
+// @route POST /api/admin/unblock
+// @access Private
+const userUnBlock = asyncHandler( async(req, res) => {
+  const userId = req.body.userId
+  const user = await User.findByIdAndUpdate(userId, {
+    isBlocked
+    : false})
+  const users = await User.find()
+  if(users) {
+      res.status(200).json({users})
+  } else {
+      res.status(404)
+      throw new Error('Users Not Found')
+  }
+})
 
 //JWT generation
 const generateToken = (id) => {
@@ -132,7 +188,8 @@ module.exports = {
   postAdminLogin,
   getUsersList,
   searchUser,
-  updateUserDetails,
+  editUser,
   deleteUser,
-  toggleStatus,
+  userBlock,
+  userUnBlock,
 };

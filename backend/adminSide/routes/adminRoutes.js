@@ -7,9 +7,10 @@ const {
   postAdminLogin,
   getUsersList,
   searchUser,
-  updateUserDetails,
+  editUser,
   deleteUser,
-  toggleStatus,
+  userBlock,
+  userUnBlock,
 } = require("../controllers/adminController");
 
 router.route("/login").post(postAdminLogin);
@@ -18,8 +19,8 @@ router.route("/addUser").post(protect, registerUser);
 router
   .route("/:userId")
   .delete(protect, deleteUser)
-  .put(protect, updateUserDetails);
+  .put(protect, editUser);
 router.route("/search").post(protect, searchUser);
-router.route("/toggleStatus/:userId").put(protect, toggleStatus);
-
+router.post('/block', protect,  userBlock)
+router.post('/unblock', protect, userUnBlock)
 module.exports = router;
