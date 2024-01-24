@@ -59,6 +59,10 @@ const loginUser = asyncHandler(async(req, res) =>{
         res.status(400)
         throw new Error('No user found with this email!');
     }
+    if(user.isBlocked){
+        res.status(400)
+        throw new Error('Your account is currently blocked!');
+    }
     if(user && (await bcrypt.compare(password, user.password))){
         res.status(201).json({
             _id:user.id,
